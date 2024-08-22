@@ -1,0 +1,220 @@
+#include <TXLib.h>
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+
+
+/*struct SS_Tests
+    {
+    int    num_Test;
+    double        a;
+    double        b;
+    double        c;
+    double   x1_exp;
+    double   x2_exp;
+    int n_roots_exp;
+    }; */
+
+typedef struct  //чтобы не повторять struct при вызове функции
+{
+    int    num_Test;
+    double        a;
+    double        b;
+    double        c;
+    double   x1_exp;
+    double   x2_exp;
+    int n_roots_exp;;
+} SS_Tests;
+
+int SS_Solver_func(double a, double b, double c, double* x1, double* x2);
+int Double_Diff_comp(double a, double b);
+void func_Tester(struct SS_Tests data);
+
+
+
+int main (void)
+{
+
+    struct SS_Tests data = {.num_Test = 1,.a = 0, .b = 5, .c = 8, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1}; //
+    struct SS_Tests data = {.num_Test = 2,.a = 0, .b = 0, .c = 0, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = -1};  //
+    struct SS_Tests data = {.num_Test = 3,.a = 0, .b = 0, .c = 8, .x1_exp = 0, .x2_exp = 0, .n_roots_exp = 0};        //
+    struct SS_Tests data = {.num_Test = 4,.a = 0, .b = 5, .c = 0, .x1_exp = 0, .x2_exp = 0, .n_roots_exp = 1};      //
+    struct SS_Tests data = {.num_Test = 5,.a = 1, .b = 0, .c = 0, .x1_exp = 0, .x2_exp = 0, .n_roots_exp = 1};      //
+    struct SS_Tests data = {.num_Test = 6,.a = 7, .b = 0, .c = 8, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1};
+    struct SS_Tests data = {.num_Test = 7,.a = 4, .b = 5, .c = 0, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1};
+    struct SS_Tests data = {.num_Test = 8,.a = 0, .b = 5, .c = 8, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1};
+    struct SS_Tests data = {.num_Test = 9,.a = 0, .b = 5, .c = 8, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1};
+    struct SS_Tests data = {.num_Test = 10,.a = 0, .b = 5, .c = 8, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1};
+    struct SS_Tests data = {.num_Test = 11,.a = 0, .b = 5, .c = 8, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1};
+    func_Tester(data);
+
+
+    printf ("# Enter coefficients of a square equation a, b, c:   \n");
+    printf ("# Please use real numbers instead of letters, words etc.  \n");
+
+    double a = 0;
+    double b = 0;
+    double c = 0;
+
+    while (scanf ("%lg %lg %lg", &a, &bperson, &c) == 3)
+        {
+        double x1 = 0;
+        double x2 = 0;
+        int n_roots = SS_Solver_func(a, b, c, &x1, &x2);
+
+
+        switch (n_roots)
+        {
+            case 0: printf ("No roots found.\n");
+            break;
+
+            case 1: printf ("Given Square Equation has only 1 (one) root: x = %lg\n", x1);
+            break;
+
+            case 2: printf ("Given Square Equation has 2 (two) roots: x1 = %lg, x2 = %lg\n", x1, x2);
+            break;
+
+            case -1: printf ("Given Square Equation has Infinite number of roots.");
+            break;
+
+            default: printf ("main(): ERROR: n_roots = %d\n", n_roots);
+            break;
+        }
+    }
+}
+
+//---Introduction-of-a-constant-and-a-function-comparing-the-difference-of-double-numbers--------------
+
+
+
+int Double_Diff_comp(double a, double b)
+{
+    const double Const_E = 0.0000000001;
+    double Diff = a - b;
+    if (fabs(Diff) < Const_E) return 1;
+    else                      return 0;
+}
+//-----------------------------------------------------------------------------------------------------
+
+//----------------Square-Equation-Solving-Function-----------------------------------------------------
+
+/* enum? */
+
+
+int SS_Solver_func(double a, double b, double c, double* x1, double* x2)
+{
+    assert(x1 != 0);
+    assert(x2 != 0);
+    assert(isfinite(a));
+    assert(isfinite(b));
+    assert(isfinite(c));
+
+
+/* unit-tests for 15? diff situations with INFINITY and so on + try to wrap it in structure */
+
+
+
+
+    if (Double_Diff_comp(a,0))
+    {
+        if (Double_Diff_comp(b,0))
+        {
+           if (Double_Diff_comp(c,0))
+               {
+                return (-1);
+               }
+           else
+               return 0;
+          }
+      else
+          {
+          if (Double_Diff_comp(c,0))
+              {
+               *x1 = 0;
+               return 1;
+              }
+          else
+              *x1 = (-c)/b;
+              return 1;
+          }
+
+     }
+ else
+    {
+     double SS_Discr = ((b*b)) - (4*a*c);
+     if (SS_Discr > 0)
+         {
+          double sqrt_Discr = sqrt(SS_Discr);
+          *x1 = ((-b) + sqrt_Discr)/(2*a);
+          *x2 = ((-b) - sqrt_Discr)/(2*a);
+          return 2;
+         }
+     else if (Double_Diff_comp(SS_Discr,0))
+         {
+          *x1 = (-b)/(2*a);
+          return 1;
+         }
+     else
+         return 0;
+
+     }
+
+}
+
+//---------------------------------------------------------------------------------------------------------
+
+//-------Структура,-содержащая-данные-для-выполнения-тестов------------------------------------------------
+
+
+//SS_Tests Test_1 = {.num_Test = 1,.a = 0, .b = 5, .c = 8, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 1}
+
+// ввести нормальные значения и значения спoсобные вывести программу на ошибку (+-INFINITY, NaN)
+//SS_Tests Test_2 = {.a = 0, .b = 0, .c = 0, .x1_exp = /*?*/, .x2_exp = /*?*/, .n_roots_exp = INFINITY}
+/*SS_Tests Test_3 = {.a = 5, .b = 0, .c = 8, .x1_exp = 0, .x2_exp = 0, .n_roots_exp = 0}  // в местах, где один корень, вернуться в код и присвоить по адресу ячейки x1 значение x2 ИЛИ вспомнить что только ч1 приобретет знчние в то время как ч2 будет 0 пиздец наху й
+SS_Tests Test_4 = {.a = 5, .b = 8, .c = 0, .x1_exp = -1.6, .x2_exp = 0, .n_roots_exp = 2}
+SS_Tests Test_5 = {.a = 0, .b = 1, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}  // в местах, где нет корней, оба корня равны нулям
+SS_Tests Test_6 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}*/
+/*?????????*//* SS_Tests Test_7 = {.a = INFINITY, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}  // в местах где одно или оба из значнией INF ля я хз
+SS_Tests Test_8 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}
+SS_Tests Test_9 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}
+SS_Tests Test_10 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}
+SS_Tests Test_11 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}
+SS_Tests Test_12 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}
+SS_Tests Test_13 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}
+SS_Tests Test_14 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2}
+SS_Tests Test_15 = {.a = 1, .b = 0, .c = -4, .x1_exp = -2, .x2_exp = +2, .n_roots_exp = 2} */
+
+
+//---------------------------------------------------------------------------------------------------------
+
+//-------Function-for-Testing------------------------------------------------------------------------------
+
+void change_Test(struct SS_Tests * data)
+{
+    data->a = SS_Tests->a + 1;
+
+void func_Tester(struct SS_Tests data)
+{
+    double x1 = 0;
+    double x2 = 0;
+    int n_roots = SS_Solver_func(data.a, data.b, data.c, &x1, &x2);
+
+    if ((n_roots != data.n_roots_exp) || (x1 != data.x1_exp) || (x2 != data.x2_exp ))
+    {
+        printf("# ErrorTest_%d! Compiled: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, n_roots = %lg.\n"
+               "# Expected: x1 = %lg, x2 = %lg, n_roots = %lg.\n",
+                data.num_Test,
+                data.a,
+                data.b,
+                data.c,
+                x1,
+                x2,
+                n_roots,
+                data.x1_exp,
+                data.x2_exp,
+                data.n_roots_exp);
+    }
+}
+
+
+
