@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <math.h>
+#include <TXLib.h>
+
+
+int main (void)
+{
+printf ("# Enter coefficients of a square equation a, b, c: ");
+double a = 0, b = 0, c = 0;
+
+scanf ("%lg %lg %lg", &a, &b, &c);
+
+}
+
+//---Introduction-of-a-constant-and-a-function-comparing-the-difference-of-double-numbers--------------
+
+double Const_E = 0.0000000001;
+
+int Double_Diff_comp(double a, double b)
+{
+    double Diff = a - b;
+    if (fabs(Diff) < Const_E)    // или Fabs(a-b) без ввода double-числа, отвечающего за разность a и b
+        {
+        return 1;
+        }
+    else
+        return 0;
+}
+//-----------------------------------------------------------------------------------------------------
+
+//----------------Square-Equation-Solving-Function-----------------------------------------------------
+
+//enum потом бахнуть
+
+
+int SS_Solver_func(double a, double b, double c, double* x1, double* x2)
+{
+    if (Double_Diff_comp(a,0))
+    {
+        if (Double_Diff_comp(b,0))
+        {
+           if (Double_Diff_comp(c,0))
+               {
+                return (-1);
+               }
+           else
+               return 0;
+          }
+      else
+          {
+          if (Double_Diff_comp(c,0))
+              {
+               *x1 = 0;
+               return 1;
+              }
+          else
+              *x1 = (-c)/b;
+              return 1;
+          }
+
+     }
+ else
+     {
+     double SS_Discr = ((b*b)) - (4*a*c);
+     if (not(Double_Diff_comp(SS_Discr,0)))    /* логическое отрицание,т.к. Discr<0 */
+         {
+          double sqrt_Discr = sqrt(SS_Discr);
+          *x1 = ((-b) + sqrt_Discr)/(2*a);
+          *x2 = ((-b) - sqrt_Discr)/(2*a);
+          return 2;
+         }
+     else if (Double_Diff_comp(SS_Discr,0))
+         {
+          *x1 = (-b)/(2*a);
+          return 1;
+         }
+     else
+         return 0;
+
+     }
+
+}
+
+//---------------------------------------------------------------------------------------------------------
+
+
+
+double x1 = 0, x2 = 0;
+
+int SS_Roots = SS_Solver_func("%lg %lg %lg", &a, &b, &c);
+
+switch (SS_Roots)
+{
+    case 0: printf ("No roots found.\n");
+    break;
+
+    case 1: printf ("Given Square Equation has only 1 (one) root: x = %lg\n", x1);
+    break;
+
+    case 2: printf ("Given Square Equation has 2 (two) roots: x1 = %lg, x2 = %lg\n", x1, x2);
+    break;
+
+    case -1: printf ("Given Square Equation has Infinite number of roots.");
+    break;
+
+    default: printf ("main(): ERROR: SS_Roots = %d\n", SS_Roots);
+    break;
+}
