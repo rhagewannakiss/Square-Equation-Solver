@@ -1,0 +1,129 @@
+#include <TXLib.h>
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+
+
+int SS_Solver_func(double a, double b, double c, double* x1, double* x2);
+int Double_Diff_comp(double a, double b);
+
+// почитать что такое assert
+int main (void)
+{
+    printf ("# Enter coefficients of a square equation a, b, c: ");
+    double a = 0;
+    double b = 0;
+    double c = 0;
+
+    while (scanf ("%lg %lg %lg", &a, &b, &c) == 3)
+        {
+        double x1 = 0;
+        double x2 = 0;
+        int n_roots = SS_Solver_func(a, b, c, &x1, &x2);
+
+
+        switch (n_roots)
+        {
+            case 0: printf ("No roots found.\n");
+            break;
+
+            case 1: printf ("Given Square Equation has only 1 (one) root: x = %lg\n", x1);
+            break;
+
+            case 2: printf ("Given Square Equation has 2 (two) roots: x1 = %lg, x2 = %lg\n", x1, x2);
+            break;
+
+            case -1: printf ("Given Square Equation has Infinite number of roots.");
+            break;
+
+            default: printf ("main(): ERROR: n_roots = %d\n", n_roots);
+            break;
+        }
+    }
+}
+
+//---Introduction-of-a-constant-and-a-function-comparing-the-difference-of-double-numbers--------------
+
+
+
+int Double_Diff_comp(double a, double b)
+{
+    const double Const_E = 0.0000000001;
+    double Diff = a - b;
+    if (fabs(Diff) < Const_E) return 1;
+    else                      return 0;
+}
+//-----------------------------------------------------------------------------------------------------
+
+//----------------Square-Equation-Solving-Function-----------------------------------------------------
+
+/* enum? */
+
+
+int SS_Solver_func(double a, double b, double c, double* x1, double* x2)
+{
+    assert(x1 != 0);
+    assert(x2 != 0);
+    assert(isfinite(a));     /*isfinite  - функция, проверяющая конечность аргумента и выводящая 0 при +INF, -INF и NaN */
+    assert(isfinite(b));
+    assert(isfinite(c));
+    
+    
+/* unit-tests for 15? diff situations with INFINITY and so on + try to wrap it in structure */
+ 
+
+
+
+    if (Double_Diff_comp(a,0))
+    {
+        if (Double_Diff_comp(b,0))
+        {
+           if (Double_Diff_comp(c,0))
+               {
+                return (-1);
+               }
+           else                         
+               return 0;
+          }
+      else
+          {
+          if (Double_Diff_comp(c,0))
+              {
+               *x1 = 0;
+               return 1;
+              }
+          else
+              *x1 = (-c)/b;
+              return 1;
+          }
+
+     }
+ else
+    {
+     double SS_Discr = ((b*b)) - (4*a*c);
+     if (SS_Discr > 0)
+         {
+          double sqrt_Discr = sqrt(SS_Discr);
+          *x1 = ((-b) + sqrt_Discr)/(2*a);
+          *x2 = ((-b) - sqrt_Discr)/(2*a);
+          return 2;
+         }
+     else if (Double_Diff_comp(SS_Discr,0))
+         {
+          *x1 = (-b)/(2*a);
+          return 1;
+         }
+     else
+         return 0;
+
+     }
+
+}
+
+//---------------------------------------------------------------------------------------------------------
+
+//-------Function-for-checking-----------------------------------------------------------------------------
+
+
+
+
