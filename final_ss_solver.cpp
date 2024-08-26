@@ -14,7 +14,7 @@ typedef struct SS_Tests
     double   x1_exp;
     double   x2_exp;
     int n_roots_exp;
-} SS_Tests;
+}   SS_Tests;
 
 int SS_Solver_Func(double a, double b, double c, double* x1, double* x2);
 int Quadric_Func(double a, double b, double c, double* x1, double* x2);
@@ -34,7 +34,7 @@ typedef enum Roots_case
     ONE_Root =    1,
     TWO_Roots =   2,
     INF_Roots =  -1
-} Roots_case;
+}   Roots_case;
 
 //---------------------------------MAIN--------------------------------------------------------------------
 
@@ -46,6 +46,10 @@ int main (void)
     double b = 0;
     double c = 0;
 
+    printf ("# Enter coefficients of a square equation a, b, c:   \n");
+    printf ("# Please use real numbers instead of letters, words etc.  \n");
+    printf ("# If you want the program to complete execution, please hold down the keyboard shortcut 'Ctrl' + 'C'.\n");
+
     Input_Func(&a, &b, &c);
 
     double   x1 = 0;
@@ -55,7 +59,7 @@ int main (void)
     sollution(x1, x2, n_roots);
 }
 
-//---Introduction-of-a-constant-and-a-function-comparing-the-difference-of-double-numbers--------------
+//---Introduction-of-a-constant-and-a-function-comparing-the-difference-of-double-numbers-----------------
 
 
 
@@ -67,7 +71,8 @@ int Double_Diff_comp(double a, double b)
     else                       return 0;
 }
 
-//----------------Square-Equation-Solving-Function-----------------------------------------------------
+//----------------Square-Equation-Solving-Function--------------------------------------------------------
+
 /*linear equation (a==0)*/
 
 int Linear_Func(double b, double c, double* x1, double* x2)
@@ -123,8 +128,8 @@ int Quadric_Func(double a, double b, double c, double* x1, double* x2)
         if (SS_Discr > 0)
         {
             double sqrt_Discr = sqrt(SS_Discr);
-            *x1 = ((-b) + sqrt_Discr)/(2*a);
-            *x2 = ((-b) - sqrt_Discr)/(2*a);
+            *x1 =    ((-b) + sqrt_Discr)/(2*a);
+            *x2 =    ((-b) - sqrt_Discr)/(2*a);
             return TWO_Roots;
         }
         else if (Double_Diff_comp(SS_Discr,0))
@@ -142,7 +147,7 @@ int Quadric_Func(double a, double b, double c, double* x1, double* x2)
     }
  }
 
-/*общая функция как для линейного уравнения, так и для квадратичного*/
+//--------------------------------------------------------------------------------------------------------
 
 int SS_Solver_Func(double a, double b, double c, double* x1, double* x2)
 {
@@ -160,7 +165,7 @@ int SS_Solver_Func(double a, double b, double c, double* x1, double* x2)
     return n_roots;
 }
 
-//-------Function-for-Testing--------------------------------------int  readable_coef(double x1, double x2, int n_roots)----------------------------------------
+//-------Function-for-Testing------------------------------------------------------------------------------
 
 void func_Tester(SS_Tests data)
 {
@@ -251,13 +256,12 @@ struct SS_Tests mass[] =    {{.num_Test = 0,   .a =    0,  .b =   5,  .c =  8,  
 
 void Input_Func(double* a, double* b, double* c)
 {
-    printf ("# Enter coefficients of a square equation a, b, c:   \n");
-    printf ("# Please use real numbers instead of letters, words etc.  \n");
-    printf ("# If you would love the program to stop running, please enter 'Thanks!' \n");
-
     while (scanf("%lg %lg %lg", a, b, c) != 3)
     {
-        while (getchar() != '\n') {}
-        printf ("#Invalid input! Please, enter numbers only! =(  \n");
+        char ch = 0;
+
+        while ((ch = getchar()) != '\n' && (ch != EOF)) {}
+        printf ("# Invalid input! Please, enter numbers only! =(  \n");
     }
 }
+//-------------------------------------------------------------------------------------------------------------
